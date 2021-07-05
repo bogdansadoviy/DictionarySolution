@@ -1,0 +1,41 @@
+﻿@model Dictionary.Entities.Word
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Деталі слова</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PlText)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PlText)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UaText)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UaText)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Transcription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Transcription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ImagePath)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="@Model.ImagePath" style="object-fit: fill; width: inherit; height: inherit" />
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a class="btn btn-sm btn-primary" asp-action="Index">Back to List</a>
+</div>

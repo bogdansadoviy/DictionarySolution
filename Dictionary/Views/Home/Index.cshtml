@@ -1,8 +1,135 @@
-﻿@{
+﻿@model IEnumerable<Dictionary.Entities.Word>
+@{
     ViewData["Title"] = "Home Page";
 }
+@{var firstElement = Model.FirstOrDefault(); }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<link href="~/css/main.css" rel="stylesheet" />
+<!-- Home -->
+<article id="top" class="wrapper style1">
+    <div class="container">
+        <div class="row">
+            <div class="col-4 col-5-large col-12-medium">
+                <span class="image fit"><img src="images/logo-main.png" alt="" /></span>
+            </div>
+            <div class="col-8 col-7-large col-12-medium">
+                <header>
+                    <h1><strong>Привіт</strong> від словника!</h1>
+                </header>
+                <p>Ta strona to jest <strong>Słownik</strong>, gdzie bezpłatnie można uczyć język Ukrainski. Dla tego, żeby można było zapisywać wyuczone słowa potrzebno<a href="#" class="login-link"> zarejestrować się</a>.</p>
+                <a href="#work" class="button large scrolly">Zapoznać się z alfabetem</a>
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- Work -->
+<article id="work" class="wrapper style2">
+    <div class="container">
+        <header>
+            <h2>Alfabet</h2>
+            <p>Jest przedstawiony alfabet Ukrainski!</p>
+        </header>
+        <div class="row aln-center">
+            <div class="col-4 col-6-medium col-12-small">
+                <img src="images/alfabet.png">
+            </div>
+        </div>
+        <footer>
+            <a href="#portfolio" class="button large scrolly">Przejść do uczenia słów</a>
+        </footer>
+    </div>
+</article>
+
+<!-- Portfolio -->
+<article id="portfolio" class="wrapper style3">
+    <div class="container justify-content-center">
+        <header>
+            <h2>Uczymy słowa Ukrainskie</h2>
+            <p>Poniżej jest przedstawione zdjęcie do słowa, słowo po Polsku, słowo po Ukrainsku i jego transkrypcja.</p>
+        </header>
+
+        <div id="carouselExampleControls" class="carousel">
+            <div class="carousel-inner">
+
+                @foreach (var word in Model)
+                {
+                    var activeClass = firstElement == word ? "active" : string.Empty;
+                    <div  class="carousel-item @activeClass">
+                        
+                            <div class="justify-content-center">
+                                <div class="row justify-content-center">
+                                    <img style="height: 400px !important;" src="@word.ImagePath" />
+                                </div>
+                                <div class="row justify-content-center">
+                                    <h5>@word.PlText</h5>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <h5>@word.UaText</h5>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <p class="transcription">[@word.Transcription]</p>
+                                </div>
+                            </div>
+                       
+                    </div>
+                };
+
+            </div>
+            <a class="carousel-control-prev" style=" filter: invert(100%);" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" style=" filter: invert(100%);" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <footer>
+            <p>Zapisać słowo, do kategotii wyuczone | <a href="#" class="login-link">Zapisz</a></p>
+            <a href="#contact" class="button large scrolly">Przejść do słów zapisanych</a>
+        </footer>
+    </div>
+</article>
+
+<!-- Contact -->
+<article id="contact" class="wrapper style4">
+    <div class="container medium">
+        <header>
+            <h2>Słowa zapisane</h2>
+            <p>Tutaj są umieszczone słowa które jest wyuczone.</p>
+        </header>
+        <div class="row">
+            <div class="col-12">
+                <form method="post" action="#">
+                    <div class="row">
+                        <div class="col-12">
+                            <textarea name="message" id="message" placeholder="Zapisane słowa:"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <ul class="actions">
+                                <li><input type="button" value="0%" title="Kiedy będzie 75%, odblokuję się test końcowy." /></li>
+                                <li><input type="reset" value="Usuń słowo" class="alt" /></li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer>
+            <ul id="copyright">
+                <li>&copy; Dictionary. All rights reserved.</li>
+                <li>Email: w61863@student.wsiz.edu.pl</li>
+            </ul>
+        </footer>
+    </div>
+</article>
+
+<!-- Scripts -->
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/jquery.scrolly.min.js"></script>
+<script src="~/js/browser.min.js"></script>
+<script src="~/js/breakpoints.min.js"></script>
+<script src="~/js/util.js"></script>
+<script src="~/js/main.js"></script>
