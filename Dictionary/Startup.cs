@@ -32,14 +32,19 @@ namespace Dictionary
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped<DataInitializer>();
+
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app,
+            IWebHostEnvironment env,
+            DataInitializer dataInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -67,6 +72,12 @@ namespace Dictionary
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            Task.Run(async () => 
+            {
+                await dataInitializer.InitializeRoles();
+                await dataInitializer.InitializeAdminUser();
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }

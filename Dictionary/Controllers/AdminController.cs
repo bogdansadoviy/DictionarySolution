@@ -10,9 +10,11 @@ using Dictionary.Entities;
 using Dictionary.Models;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Dictionary.Controllers
 {
+    [Authorize(Roles = Constants.AdminRoleName)]
     public class AdminController : Controller
     {
         private readonly string _imagesDirectory;
