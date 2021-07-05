@@ -9,13 +9,15 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
 </head>
+
+@{var isHomeController = this.ViewContext.RouteData.Values["controller"]?.ToString() == "Home"; }
+
 <body class="is-preload">
     <header>
         <!-- Nav -->
         <nav id="nav">
            
                 <ul class="container d-flex">
-
                     <li><a href="#top">Główna</a></li>
                     <li><a href="#work">Alfabet</a></li>
                     <li><a href="#portfolio">Uczyć</a></li>
@@ -26,7 +28,10 @@
 
     </header>
   
-    @RenderBody()
+    @{var containerClass = isHomeController ? "" : "container"; }
+    <div class="@containerClass">
+        @RenderBody()
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
