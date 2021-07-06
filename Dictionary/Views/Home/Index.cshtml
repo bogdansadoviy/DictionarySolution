@@ -118,12 +118,15 @@
                         </div>
                         <div class="col-12">
                             <ul class="actions" >
-                                <li><input type="button" value="@Model.RateOfTest %" title="Kiedy będzie 75%, odblokuję się test końcowy." /></li>
+                                <li style="display:inline-grid">
+                                    <input type="button" value="@Model.RateOfTest %" title="Kiedy będzie 75%, odblokuję się test końcowy." />
+                                </li>
                                 @if (Model.IsTestAvaible)
                                 {
-                                    <li><a class="btn alt" asp-action="TestingPage">Zdać test</a> </li>
+                                    <li style="display:inline-grid">
+                                        <a class="button" asp-action="TestingPage">Zdać test</a>
+                                    </li>
                                 }
-
                             </ul>
                         </div>
                     </div>
@@ -146,3 +149,19 @@
 <script src="~/js/breakpoints.min.js"></script>
 <script src="~/js/util.js"></script>
 <script src="~/js/main.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        var wordWasAdded = ('@Model.WordWasAdded' == 'True');
+        var wordWasRemoved = ('@Model.WordWasRemoved' == 'True');
+
+        if (wordWasAdded)
+        {
+            document.getElementById("portfolio").scrollIntoView();
+        }
+        else if (wordWasRemoved)
+        {
+            document.getElementById("contact").scrollIntoView();
+        }
+    });
+</script>

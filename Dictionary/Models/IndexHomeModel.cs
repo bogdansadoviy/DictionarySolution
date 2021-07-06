@@ -11,5 +11,7 @@ namespace Dictionary.Models
         public List<WordModel> WordsToLearn { get; set; }
         public bool IsTestAvaible { get; set; }
         public int RateOfTest { get; set; }
+        public bool WordWasAdded { get; set; }
+        public bool WordWasRemoved { get; set; }
     }
 }

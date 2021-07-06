@@ -23,10 +23,12 @@ namespace Dictionary.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(bool wordWasAdded, bool wordWasRemoved)
         {
             var model = new IndexHomeModel();
-           var allWords = _context.Words.ToList()
+            model.WordWasAdded = wordWasAdded;
+            model.WordWasRemoved = wordWasRemoved;
+            var allWords = _context.Words.ToList()
                 .Select(_ => new WordModel(_))
                 .ToList();
             var ids = _context.UserWordMappings
@@ -40,8 +42,8 @@ namespace Dictionary.Controllers
                 .ToList();
 
             var totalWords = allWords.Count;
-            model.RateOfTest = (int)((((double)model.UserWords.Count) / ((double)totalWords)) * 100);
-            model.IsTestAvaible = ((double)model.UserWords.Count) / ((double)totalWords) > 0.75;
+            model.RateOfTest = (int)(((double)model.UserWords.Count) / totalWords * 100);
+            model.IsTestAvaible = ((double)model.UserWords.Count) / totalWords > 0.75;
 
             return View(model);
         }
@@ -56,7 +58,7 @@ namespace Dictionary.Controllers
             _context.UserWordMappings.Add(userWordMapping);
             await _context.SaveChangesAsync();
 
-            return  RedirectToAction("Index");
+            return  RedirectToAction(nameof(Index), new { wordWasAdded = true });
         }
 
         // POST: Index/DeleteConfirmed/5
@@ -65,7 +67,8 @@ namespace Dictionary.Controllers
             var word = _context.UserWordMappings.FirstOrDefault(_ => _.WordId == id && _.UserId == User.UserId());
             _context.UserWordMappings.Remove(word);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Index), new { wordWasRemoved = true });
         }
 
         public IActionResult TestingPage()
