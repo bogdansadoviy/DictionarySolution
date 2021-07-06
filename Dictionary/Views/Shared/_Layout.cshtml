@@ -16,18 +16,19 @@
     <header>
         <!-- Nav -->
         <nav id="nav">
-           
-                <ul class="container d-flex">
-                    <li><a href="#top">Główna</a></li>
-                    <li><a href="#work">Alfabet</a></li>
-                    <li><a href="#portfolio">Uczyć</a></li>
-                    <li><a href="#contact">Zapisane</a></li>
-                    <li class="ml-auto p-2"><partial name="_LoginPartial" /></li>
-                </ul>
+
+            <ul class="container d-flex">
+                <li><a asp-action="Index">Strona główna</a></li>
+                <li><a href="#work">Alfabet</a></li>
+                <li><a href="#portfolio">Nauka</a></li>
+                <li><a href="#contact">Słowa zapisane</a></li>
+              
+                <li class="ml-auto p-2"><partial name="_LoginPartial" /></li>
+            </ul>
         </nav>
 
     </header>
-  
+
     @{var containerClass = isHomeController ? "" : "container"; }
     <div class="@containerClass">
         @RenderBody()

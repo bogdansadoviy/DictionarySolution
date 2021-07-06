@@ -1,4 +1,5 @@
 ﻿using Dictionary.Data;
+using Dictionary.Entities;
 using Dictionary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,21 +15,60 @@ namespace Dictionary.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
+        
 
         public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
         {
             _context = context;
             _logger = logger;
-
         }
 
         public IActionResult Index()
         {
-            var words = _context.Words.ToList();
-            return View(words);
+            var model = new IndexHomeModel();
+           var allWords = _context.Words.ToList()
+                .Select(_ => new WordModel(_))
+                .ToList();
+            var ids = _context.UserWordMappings
+                .Where(_ => _.UserId == User.UserId())
+                .Select(_ => _.WordId);
+            model.UserWords = allWords
+                .Where(_ => ids.Contains(_.Id))
+                .ToList();
+            model.WordsToLearn = allWords
+                .Where(_ => !ids.Contains(_.Id))
+                .ToList();
+
+            var totalWords = allWords.Count;
+            model.RateOfTest = (int)((((double)model.UserWords.Count) / ((double)totalWords)) * 100);
+            model.IsTestAvaible = ((double)model.UserWords.Count) / ((double)totalWords) > 0.75;
+
+            return View(model);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> AddWord(int? id)
+        {
+            var userWordMapping = new UserWordMapping
+            {
+                UserId = User.UserId(),
+                WordId = (int)id
+            };
+            _context.UserWordMappings.Add(userWordMapping);
+            await _context.SaveChangesAsync();
+
+            return  RedirectToAction("Index");
+        }
+
+        // POST: Index/DeleteConfirmed/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            var word = _context.UserWordMappings.FirstOrDefault(_ => _.WordId == id && _.UserId == User.UserId());
+            _context.UserWordMappings.Remove(word);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult TestingPage()
         {
             return View();
         }

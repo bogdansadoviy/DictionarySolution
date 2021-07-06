@@ -12,11 +12,12 @@ namespace Dictionary.Models
     {
         public int Id { get; set; }
         [Required]
-        [DisplayName("Слово на польському")]
+        [DisplayName("Word on the Polish.")] 
         public string PlText { get; set; }
+        [DisplayName("Word on the Ukrainian")]
         public string UaText { get; set; }
         public string Transcription { get; set; }
-        [DisplayName("Зображення")]
+        [DisplayName("Image")]
         public IFormFile File { get; set; }
 
         public WordWithImageModel()

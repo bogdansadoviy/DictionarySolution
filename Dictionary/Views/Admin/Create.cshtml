@@ -4,32 +4,31 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Додавання нового слова</h1>
+<h1>Adding a new word</h1>
 
-<h4>Додавання нового слова</h4>
 <hr />
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="PlText" class="control-label"></label>
+                <label asp-for="PlText" class="control-label">Word in Polish</label>
                 <input asp-for="PlText" class="form-control" />
                 <span asp-validation-for="PlText" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UaText" class="control-label"></label>
+                <label asp-for="UaText" class="control-label">Word on the Ukrainian</label>
                 <input asp-for="UaText" class="form-control" />
                 <span asp-validation-for="UaText" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Transcription" class="control-label"></label>
+                <label asp-for="Transcription" class="control-label">Transcription</label>
                 <input asp-for="Transcription" class="form-control" />
                 <span asp-validation-for="Transcription" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="File" class="control-label">Зображення для слова</label>
+                <label asp-for="File" class="control-label">Image</label>
                 <input name="File" type="file" asp-for="File" accept="image/png, image/gif, image/jpeg" class="form-control" />
                 <span asp-validation-for="File" class="text-danger"></span>
             </div>
@@ -39,7 +38,7 @@
             <span asp-validation-for="ImagePath" class="text-danger"></span>
         </div>*@
             <div class="form-group">
-                <input type="submit" value="Зберегти слово" class="btn btn-primary" />
+                <input type="submit" value="Save the word" class="btn btn-primary" />
             </div>
         </form>
     </div>

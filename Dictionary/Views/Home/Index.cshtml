@@ -1,8 +1,8 @@
-﻿@model IEnumerable<Dictionary.Entities.Word>
+﻿@model Dictionary.Models.IndexHomeModel
 @{
     ViewData["Title"] = "Home Page";
 }
-@{var firstElement = Model.FirstOrDefault(); }
+@{var firstElement = Model.WordsToLearn.FirstOrDefault(); }
 
 <link href="~/css/main.css" rel="stylesheet" />
 <!-- Home -->
@@ -16,8 +16,8 @@
                 <header>
                     <h1><strong>Привіт</strong> від словника!</h1>
                 </header>
-                <p>Ta strona to jest <strong>Słownik</strong>, gdzie bezpłatnie można uczyć język Ukrainski. Dla tego, żeby można było zapisywać wyuczone słowa potrzebno<a href="#" class="login-link"> zarejestrować się</a>.</p>
-                <a href="#work" class="button large scrolly">Zapoznać się z alfabetem</a>
+                <p>Witaj na stronie słownika, gdzie bezpłatnie można uczyć się języka Ukraińskiego. Konieczne jest zarejestrowanie się, aby można zapisać wyuczone określenia</p>
+                <a href="#work" class="button large scrolly">Zapoznaj się z alfabetem</a>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
             </div>
         </div>
         <footer>
-            <a href="#portfolio" class="button large scrolly">Przejść do uczenia słów</a>
+            <a href="#portfolio" class="button large scrolly">Przejdź do nauki słów</a>
         </footer>
     </div>
 </article>
@@ -45,34 +45,38 @@
 <article id="portfolio" class="wrapper style3">
     <div class="container justify-content-center">
         <header>
-            <h2>Uczymy słowa Ukrainskie</h2>
+            <h2>Uczymy się Ukraińskich słów</h2>
             <p>Poniżej jest przedstawione zdjęcie do słowa, słowo po Polsku, słowo po Ukrainsku i jego transkrypcja.</p>
         </header>
 
         <div id="carouselExampleControls" class="carousel">
             <div class="carousel-inner">
 
-                @foreach (var word in Model)
+                @foreach (var word in Model.WordsToLearn)
                 {
                     var activeClass = firstElement == word ? "active" : string.Empty;
-                    <div  class="carousel-item @activeClass">
-                        
-                            <div class="justify-content-center">
-                                <div class="row justify-content-center">
-                                    <img style="height: 400px !important;" src="@word.ImagePath" />
-                                </div>
-                                <div class="row justify-content-center">
-                                    <h5>@word.PlText</h5>
-                                </div>
-                                <div class="row justify-content-center">
-                                    <h5>@word.UaText</h5>
-                                </div>
-                                <div class="row justify-content-center">
-                                    <p class="transcription">[@word.Transcription]</p>
-                                </div>
+                    <div class="carousel-item @activeClass">
+
+                        <div class="justify-content-center">
+                            <div class="row justify-content-center">
+                                <img style="height: 400px !important;" src="@word.ImagePath" />
                             </div>
-                       
+                            <div class="row justify-content-center">
+                                <h5>@word.PlText</h5>
+                            </div>
+                            <div class="row justify-content-center">
+                                <h5>@word.UaText</h5>
+                            </div>
+                            <div class="row justify-content-center">
+                                <p class="transcription">[@word.Transcription]</p>
+                            </div>
+                        </div>
+                        <footer>
+                            <p>Zapisać słowo, do kategotii wyuczone | <a class="login-link" asp-action="AddWord" asp-route-id="@word.Id">Zapisz</a></p>
+                        </footer>
                     </div>
+
+
                 };
 
             </div>
@@ -85,11 +89,10 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-
         <footer>
-            <p>Zapisać słowo, do kategotii wyuczone | <a href="#" class="login-link">Zapisz</a></p>
-            <a href="#contact" class="button large scrolly">Przejść do słów zapisanych</a>
+            <a href="#contact" class="button large scrolly">Przejdź do zapisanych słów</a>
         </footer>
+
     </div>
 </article>
 
@@ -98,19 +101,29 @@
     <div class="container medium">
         <header>
             <h2>Słowa zapisane</h2>
-            <p>Tutaj są umieszczone słowa które jest wyuczone.</p>
+            <p>Tutaj umieszczone są słowa, których się nauczyłeś</p>
         </header>
         <div class="row">
             <div class="col-12">
                 <form method="post" action="#">
                     <div class="row">
                         <div class="col-12">
-                            <textarea name="message" id="message" placeholder="Zapisane słowa:"></textarea>
+                           
+                            <ul style="list-style-type: none; columns: 3; -webkit-columns: 3; -moz-columns: 3; ">
+                                @foreach (var word in Model.UserWords)
+                                {                                 
+                                    <li>@word.PlText  <a class="login-link" asp-action="Delete" asp-route-id="@word.Id">x</a></li>
+                                }
+                            </ul>
                         </div>
                         <div class="col-12">
-                            <ul class="actions">
-                                <li><input type="button" value="0%" title="Kiedy będzie 75%, odblokuję się test końcowy." /></li>
-                                <li><input type="reset" value="Usuń słowo" class="alt" /></li>
+                            <ul class="actions" >
+                                <li><input type="button" value="@Model.RateOfTest %" title="Kiedy będzie 75%, odblokuję się test końcowy." /></li>
+                                @if (Model.IsTestAvaible)
+                                {
+                                    <li><a class="btn alt" asp-action="TestingPage">Zdać test</a> </li>
+                                }
+
                             </ul>
                         </div>
                     </div>
