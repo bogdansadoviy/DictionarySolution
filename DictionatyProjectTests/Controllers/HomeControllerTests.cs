@@ -12,6 +12,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DictionatyProjectTests.Controllers
 {
@@ -31,7 +32,7 @@ namespace DictionatyProjectTests.Controllers
         }
 
         [Test]
-        public void Given_UserContainsSelectedWords_When_GetIndexPaguntReturned()
+        public void Given_UserLearn4WordsOf5_When_GetIndexPage_Then_TestIsAvailable()
         {
             var words = new List<Word>()
             {
@@ -39,19 +40,19 @@ namespace DictionatyProjectTests.Controllers
                 {
                     Id = 1
                 },
-                 new Word()
+                new Word()
                 {
                     Id = 2
                 },
-                  new Word()
+                new Word()
                 {
                     Id = 3
                 },
-                  new Word()
+                new Word()
                 {
                     Id = 4
                 },
-                  new Word()
+                new Word()
                 {
                     Id = 5
                 },
@@ -88,7 +89,7 @@ namespace DictionatyProjectTests.Controllers
         }
 
         [Test]
-        public void Given_UserContainsSelectedWords_When_GetIndexPtReturned()
+        public void Given_UserLearn1WordsOf3_When_GetIndexPage_Then_TestIsNotAvailable()
         {
             var words = new List<Word>()
             {
@@ -96,11 +97,11 @@ namespace DictionatyProjectTests.Controllers
                 {
                     Id = 1
                 },
-                 new Word()
+                new Word()
                 {
                     Id = 2
                 },
-                  new Word()
+                new Word()
                 {
                     Id = 3
                 }
@@ -118,6 +119,28 @@ namespace DictionatyProjectTests.Controllers
             var model = ((ViewResult)result).Model as IndexHomeModel;
 
             Assert.IsFalse(model.IsTestAvaible);
+        }
+
+        [Test]
+        public async Task Given_WordsExist_When_AddWord_Then_WordWasAddedIsTrue()
+        {
+            var homeController = InitControllerWithDbData(DataProvider.Words(), DataProvider.UserWordMappings());
+            var result = await homeController.AddWord(10);
+            var routeValue = ((RedirectToActionResult)result).RouteValues.FirstOrDefault();
+            var wordWasAdded = (bool)routeValue.Value;
+
+            Assert.IsTrue(wordWasAdded);
+        }
+
+        [Test]
+        public async Task Given_WordsExist_When_AddWord_Then_WordWasRemovedIsTrue()
+        {
+            var homeController = InitControllerWithDbData(DataProvider.Words(), DataProvider.UserWordMappings());
+            var result = await homeController.Delete(1);
+            var routeValue = ((RedirectToActionResult)result).RouteValues.FirstOrDefault();
+            var wordWasRemoved = (bool)routeValue.Value;
+
+            Assert.IsTrue(wordWasRemoved);
         }
 
         private HomeController InitControllerWithDbData(List<Word> words, List<UserWordMapping> userWordMappings)
