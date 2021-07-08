@@ -55,10 +55,9 @@ namespace Dictionary.Controllers
             _context.UserWordMappings.Add(userWordMapping);
             await _context.SaveChangesAsync();
 
-            return  RedirectToAction(nameof(Index), new { wordWasAdded = true });
+            return RedirectToAction(nameof(Index), new { wordWasAdded = true });
         }
 
-        // POST: Index/DeleteConfirmed/5
         public async Task<IActionResult> Delete(int id)
         {
             var word = _context.UserWordMappings.FirstOrDefault(_ => _.WordId == id && _.UserId == User.UserId());

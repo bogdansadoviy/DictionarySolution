@@ -30,7 +30,97 @@ namespace DictionatyProjectTests.Controllers
             Assert.AreEqual(2, model.WordsToLearn.Count);
         }
 
-        private HomeController InitControllerWithDbData(List<Word> words = null, List<UserWordMapping> userWordMappings = null)
+        [Test]
+        public void Given_UserContainsSelectedWords_When_GetIndexPaguntReturned()
+        {
+            var words = new List<Word>()
+            {
+                new Word()
+                {
+                    Id = 1
+                },
+                 new Word()
+                {
+                    Id = 2
+                },
+                  new Word()
+                {
+                    Id = 3
+                },
+                  new Word()
+                {
+                    Id = 4
+                },
+                  new Word()
+                {
+                    Id = 5
+                },
+
+            };
+            var userWordMapping = new List<UserWordMapping>()
+            {
+                new UserWordMapping()
+                {
+                    WordId = 1,
+                    UserId = _userId
+                },
+                new UserWordMapping()
+                {
+                    WordId = 2,
+                    UserId = _userId
+                },
+                new UserWordMapping()
+                {
+                    WordId = 3,
+                    UserId = _userId
+                },
+                new UserWordMapping()
+                {
+                    WordId = 4,
+                    UserId = _userId
+                }
+            };
+            var homeController = InitControllerWithDbData(words, userWordMapping);
+            var result = homeController.Index(false, false);
+            var model = ((ViewResult)result).Model as IndexHomeModel;
+
+            Assert.IsTrue(model.IsTestAvaible);
+        }
+
+        [Test]
+        public void Given_UserContainsSelectedWords_When_GetIndexPtReturned()
+        {
+            var words = new List<Word>()
+            {
+                new Word()
+                {
+                    Id = 1
+                },
+                 new Word()
+                {
+                    Id = 2
+                },
+                  new Word()
+                {
+                    Id = 3
+                }
+            };
+            var userWordMapping = new List<UserWordMapping>()
+            {
+                new UserWordMapping()
+                {
+                    WordId = 1,
+                    UserId = _userId
+                }
+            };
+            var homeController = InitControllerWithDbData(words, userWordMapping);
+            var result = homeController.Index(false, false);
+            var model = ((ViewResult)result).Model as IndexHomeModel;
+
+            Assert.IsFalse(model.IsTestAvaible);
+        }
+
+        private HomeController InitControllerWithDbData(List<Word> words, List<UserWordMapping> userWordMappings)
         {
             var wordsAsQueryable = words.AsQueryable();
             var applicationDbContextMock = new Mock<ApplicationDbContext>();
