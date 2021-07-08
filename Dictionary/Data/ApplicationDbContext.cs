@@ -7,13 +7,17 @@ using System.Text;
 
 namespace Dictionary.Data
 {
+
     public class ApplicationDbContext : IdentityDbContext
     {
-        public DbSet<Word> Words { get; set; }
-        public DbSet<UserWordMapping> UserWordMappings { get; set; }
+        public virtual DbSet<Word> Words { get; set; }
+        public virtual DbSet<UserWordMapping> UserWordMappings { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+        
+        // Note: for testing
+        public ApplicationDbContext() { }
     }
 }
