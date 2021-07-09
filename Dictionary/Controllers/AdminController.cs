@@ -57,15 +57,14 @@ namespace Dictionary.Controllers
         }
 
         // POST: Admin/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PlText,UaText,Transcription,ImagePath")] Word word)
+        public async Task<IActionResult> Create(WordWithImageModel word)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(word);
+                var filePath = SaveFileLocaly(word);
+                _context.Update(word.ToWordModel(@$"/WordData/{word.File.FileName}").ToEntity());
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -89,11 +88,9 @@ namespace Dictionary.Controllers
         }
 
         // POST: Admin/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, WordWithImageModel word)
+        public async Task<IActionResult> Edit(int id, EditWordModel word)
         {
             if (id != word.Id)
             {
@@ -104,8 +101,7 @@ namespace Dictionary.Controllers
             {
                 try
                 {
-                    var filePath = SaveFileLocaly(word);
-                    _context.Update(word.ToWordModel(@$"/WordData/{word.File.FileName}").ToEntity());
+                    _context.Update(word.ToWordModel().ToEntity());
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
